@@ -1,29 +1,42 @@
 #!/usr/bin/python3
+'''Minimum Operations python3 challenge'''
 
-def minOperations(n):
-    if n <= 1:
+
+def minOperations(target_chars):
+    """
+    Calculates the fewest number of
+    operations needed to result in exactly target_chars H
+    characters in this file.
+    """
+
+    chars_in_file = 1
+    copied_chars = 0
+    operations_count = 0
+
+    while chars_in_file < target_chars:
+        if copied_chars == 0:
+            copied_chars = chars_in_file
+            operations_count += 1
+
+        if chars_in_file == 1:
+            chars_in_file += copied_chars
+            operations_count += 1
+            continue
+
+        remaining = target_chars - chars_in_file
+
+        if remaining < copied_chars:
+            return 0
+
+        if remaining % chars_in_file != 0:
+            chars_in_file += copied_chars
+            operations_count += 1
+        else:
+            copied_chars = chars_in_file
+            chars_in_file += copied_chars
+            operations_count += 2
+
+    if chars_in_file == target_chars:
+        return operations_count
+    else:
         return 0
-
-    operations = 0
-    i = 2
-
-    while i * i <= n:
-        while n % i == 0:
-            operations += i
-            n //= i
-        i += 1
-
-    if n > 1:
-        operations += n
-
-    return operations
-
-
-if __name__ == "__main__":
-    n = 4
-    print("Min number of operations to reach {} characters: {}".format(
-        n, minOperations(n)))
-
-    n = 12
-    print("Min number of operations to reach {} characters: {}".format(
-        n, minOperations(n)))
