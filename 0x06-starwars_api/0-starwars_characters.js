@@ -1,41 +1,44 @@
-#!/path/to/your/node
+#!/usr/bin/node
 const request = require('request');
 
-const apiUrl = 'https://swapi-api.hbtn.io/api';
+const movieId = process.argv[2];
 
-if (process.argv.length <= 2) {
+if (!movieId) {
   console.error('Please provide the Movie ID as a command-line argument.');
   process.exit(1);
 }
 
-const movieId = process.argv[2];
+const apiUrl = `https://swapi.dev/api/films/${movieId}/`;
 
-request(`${apiUrl}/films/${movieId}/`, (err, _, body) => {
-  if (err) {
-    console.error('Error fetching film data:', err);
+request(apiUrl, function (error, response, body) {
+  if (error) {
+    console.error('Error:', error);
     process.exit(1);
   }
 
-  const charactersURL = JSON.parse(body).characters;
+  if (response.statusCode !== 200) {
+    console.error('Failed to fetch data. Status Code:', response.statusCode);
+    process.exit(1);
+  }
 
-  const getCharacterName = url => new Promise((resolve, reject) => {
-    request(url, (requestErr, __, charactersReqBody) => {
-      if (requestErr) {
-        reject(requestErr);
-      } else {
-        resolve(JSON.parse(charactersReqBody).name);
+  const filmData = JSON.parse(body);
+
+  const characters = filmData.characters;
+
+  characters.forEach(characterUrl => {
+    request(characterUrl, function (error, response, characterBody) {
+      if (error) {
+        console.error('Error:', error);
+        process.exit(1);
       }
+
+      if (response.statusCode !== 200) {
+        console.error('Failed to fetch character data. Status Code:', response.statusCode);
+        process.exit(1);
+      }
+
+      const characterData = JSON.parse(characterBody);
+      console.log(characterData.name);
     });
   });
-
-  const charactersNamePromises = charactersURL.map(getCharacterName);
-
-  Promise.all(charactersNamePromises)
-    .then(names => {
-      console.log(names.join('\n'));
-    })
-    .catch(allErr => {
-      console.error('Error fetching character names:', allErr);
-      process.exit(1);
-    });
 });
