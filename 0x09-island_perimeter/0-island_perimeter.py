@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Function to calculate the perimeter of the island
+Function to calculate the perimeter of island
 """
 
 
