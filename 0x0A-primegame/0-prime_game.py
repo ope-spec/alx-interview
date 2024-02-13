@@ -1,70 +1,44 @@
 #!/usr/bin/python3
 """
-Prime Game
+Define isWineer function, a solution to the Prime Game problem
 """
 
 
-def is_prime(num):
+def primes(n):
+    """Return list of prime numbers between 1 and n inclusive
+       Args:
+        n (int): upper boundary of range. lower boundary is always 1
     """
-    Check if a number is prime.
-
-    Parameters:
-    num (int): The number to check for primality.
-
-    Returns:
-    bool: True if the number is prime, False otherwise.
-    """
-    if num <= 1:
-        return False
-    if num <= 3:
-        return True
-    if num % 2 == 0 or num % 3 == 0:
-        return False
-    i = 5
-    while i * i <= num:
-        if num % i == 0 or num % (i + 2) == 0:
-            return False
-        i += 6
-    return True
-
-
-def prime_game_winner(nums):
-    """
-    Determine the winner of a prime number game.
-
-    Parameters:
-    nums (list of int): A list of numbers representing
-    the choices made by the players.
-
-    Returns:
-    str or None: The name of the winner ("Maria" or "Ben"),
-    or None if it's a tie.
-    """
-    primes = [num for num in range(2, max(nums) + 1) if is_prime(num)]
-    wins_maria = 0
-    wins_ben = 0
-
-    for n in nums:
-        count = sum(1 for prime in primes if prime <= n)
-        if count % 2 == 0:
-            wins_ben += 1
-        else:
-            wins_maria += 1
-
-    if wins_maria > wins_ben:
-        return "Maria"
-    elif wins_ben > wins_maria:
-        return "Ben"
-    else:
-        return None
+    prime = []
+    sieve = [True] * (n + 1)
+    for p in range(2, n + 1):
+        if (sieve[p]):
+            prime.append(p)
+            for i in range(p, n + 1, p):
+                sieve[i] = False
+    return prime
 
 
 def isWinner(x, nums):
     """
-    Determine the winner of a prime number game.
-
-    Returns:
-    str or None: The name of the winner ("Maria" or "Ben"),
-    or None if it's a tie.
+    Determines winner of Prime Game
+    Args:
+        x (int): no. of rounds of game
+        nums (int): upper limit of range for each round
+    Return:
+        Name of winner (Maria or Ben) or None if winner cannot be found
     """
-    return prime_game_winner(nums)
+    if x is None or nums is None or x == 0 or nums == []:
+        return None
+    Maria = Ben = 0
+    for i in range(x):
+        prime = primes(nums[i])
+        if len(prime) % 2 == 0:
+            Ben += 1
+        else:
+            Maria += 1
+    if Maria > Ben:
+        return 'Maria'
+    elif Ben > Maria:
+        return 'Ben'
+    return None
