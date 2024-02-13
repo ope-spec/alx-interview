@@ -31,9 +31,11 @@ def is_prime(num):
 def prime_game_winner(nums):
     """
     Determine the winner of a prime number game.
+
     Parameters:
     nums (list of int): A list of numbers representing
     the choices made by the players.
+
     Returns:
     str or None: The name of the winner ("Maria" or "Ben"),
     or None if it's a tie.
@@ -60,6 +62,7 @@ def prime_game_winner(nums):
 def isWinner(x, nums):
     """
     Determine the winner of a prime number game.
+
     Returns:
     str or None: The name of the winner ("Maria" or "Ben"),
     or None if it's a tie.
