@@ -16,7 +16,7 @@ def primes(n):
     prime_numbers = []
     sieve = [True] * (n + 1)
     for p in range(2, n + 1):
-        if sieve[p]:
+        if (sieve[p]):
             prime_numbers.append(p)
             for i in range(p, n + 1, p):
                 sieve[i] = False
@@ -24,7 +24,7 @@ def primes(n):
 
 
 def isWinner(x, nums):
-    """Determine the winner of the Prime Game.
+    """Determine the winner of the prime_numbers Game.
 
     Args:
         x (int): The number of rounds of the game.
@@ -34,20 +34,18 @@ def isWinner(x, nums):
         str or None: The name of the winner (Maria or Ben)
         or None if no winner can be determined.
     """
-    if x is None or nums is None or x == 0 or not nums:
+    if x is None or nums is None or x == 0 or nums == []:
         return None
 
-    maria_wins = ben_wins = 0
-    for num in nums:
-        prime_numbers = primes(num)
+    maria_wins = Ben_wins = 0
+    for i in range(x):
+        prime_numbers = primes(nums[i])
         if len(prime_numbers) % 2 == 0:
-            ben_wins += 1
+            Ben_wins += 1
         else:
             maria_wins += 1
-
-    if maria_wins > ben_wins:
+    if maria_wins > Ben_wins:
         return 'Maria'
-    elif ben_wins > maria_wins:
+    elif Ben_wins > maria_wins:
         return 'Ben'
-    else:
-        return None
+    return None
